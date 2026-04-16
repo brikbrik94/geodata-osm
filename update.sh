@@ -6,11 +6,8 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT_DIR="$PROJECT_ROOT/scripts"
 SOURCES_DIR="$PROJECT_ROOT/sources"
 
-# Hilfsfunktionen
-log_header() { echo -e "\n\033[1;35m=== $1 ===\033[0m"; }
-log_info() { echo -e "\033[1;34m[INFO]\033[0m $1"; }
-log_success() { echo -e "\033[1;32m[SUCCESS]\033[0m $1"; }
-log_error() { echo -e "\033[1;31m[ERROR]\033[0m $1"; }
+# Corporate Identity Utils einbinden
+source "$SCRIPT_DIR/ci/utils.sh"
 
 # --- FUNKTION: UPDATE EINER KARTE ---
 update_map() {
@@ -18,27 +15,27 @@ update_map() {
     log_header "Update gestartet für Karte: $map_name"
 
     # 1. DOWNLOAD
-    log_info "SCHRITT 1: Download..."
+    log_step 1 3 "DOWNLOAD"
     if ! bash "$SCRIPT_DIR/download.sh" "$map_name"; then
         log_error "Download für $map_name fehlgeschlagen."
         return 1
     fi
 
     # 2. MERGE
-    log_info "SCHRITT 2: Merge..."
+    log_step 2 3 "MERGE"
     if ! bash "$SCRIPT_DIR/merge.sh" "$map_name"; then
         log_error "Merge für $map_name fehlgeschlagen."
         return 1
     fi
 
     # 3. PMTILES
-    log_info "SCHRITT 3: PMTiles Konvertierung..."
+    log_step 3 3 "PMTILES KONVERTIERUNG"
     if ! bash "$SCRIPT_DIR/convert.sh" "$map_name"; then
         log_error "Konvertierung für $map_name fehlgeschlagen."
         return 1
     fi
 
-    log_success "Update für $map_name erfolgreich."
+    log_success "Update für $map_name erfolgreich abgeschlossen."
     return 0
 }
 

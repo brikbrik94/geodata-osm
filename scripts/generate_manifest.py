@@ -1,7 +1,12 @@
 import os
 import json
+import sys
 from datetime import datetime
 import shutil
+
+# Corporate Identity einbinden
+sys.path.append(os.path.join(os.path.dirname(__file__), "ci"))
+from utils import log_info, log_success, log_warn, log_error
 
 # --- KONFIGURATION ---
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -21,7 +26,7 @@ def format_size(size_bytes):
     return f"{s} {size_name[i]}"
 
 def generate_manifest():
-    print(f"📦 Generating Manifest according to Plugin-Standard...")
+    log_info("Generating Manifest according to Plugin-Standard...")
     
     if not os.path.exists(PMTILES_DIR):
         os.makedirs(PMTILES_DIR, exist_ok=True)
@@ -40,13 +45,13 @@ def generate_manifest():
         # 1. Style-Datei vorbereiten
         target_style_path = os.path.join(STYLES_DIR, style_filename)
         if os.path.exists(TEMPLATE_STYLE):
-            # Template kopieren (oder hier Platzhalter ersetzen falls nötig)
+            # Template kopieren
             shutil.copy2(TEMPLATE_STYLE, target_style_path)
-            print(f"  [STYLE] Created {style_rel_path}")
+            log_info(f"Created style: {style_rel_path}")
         else:
-            print(f"  [WARN] Template style not found at {TEMPLATE_STYLE}")
+            log_warn(f"Template style not found: {TEMPLATE_STYLE}")
 
-        # 2. Datensatz-Eintrag gemäß EXTERNAL_PLUGINS.md
+        # 2. Datensatz-Eintrag
         dataset = {
             "id": map_id,
             "type": "basemap",
@@ -59,7 +64,7 @@ def generate_manifest():
         
         file_path = os.path.join(PMTILES_DIR, filename)
         size = format_size(os.stat(file_path).st_size)
-        print(f"  [DATA]  Linked {filename} ({size})")
+        log_success(f"Linked data: {filename} ({size})")
 
     manifest = {
         "version": "1.0",
@@ -75,7 +80,7 @@ def generate_manifest():
     with open(MANIFEST_FILE, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
     
-    print(f"\n✅ Manifest saved to: {MANIFEST_FILE}")
+    log_success(f"Manifest saved to: {MANIFEST_FILE}")
 
 if __name__ == "__main__":
     generate_manifest()

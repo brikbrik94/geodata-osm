@@ -13,10 +13,8 @@ STATS_DIR="$PROJECT_ROOT/data/osm/stats"
 DOCKER_IMAGE="ghcr.io/onthegomap/planetiler:latest"
 USE_SUDO="${USE_SUDO:-0}"
 
-# Hilfsfunktionen
-log_info() { echo -e "\033[1;34m[INFO]\033[0m $1"; }
-log_success() { echo -e "\033[1;32m[SUCCESS]\033[0m $1"; }
-log_error() { echo -e "\033[1;31m[ERROR]\033[0m $1"; }
+# Corporate Identity Utils einbinden
+source "$SCRIPT_DIR/ci/utils.sh"
 
 mkdir -p "$BUILD_TMP" "$DATA_DIR" "$OUTPUT_DIR" "$STATS_DIR"
 

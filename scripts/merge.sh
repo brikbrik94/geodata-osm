@@ -3,13 +3,12 @@ set -euo pipefail
 
 # --- KONFIGURATION ---
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SCRIPT_DIR="$PROJECT_ROOT/scripts"
 DATA_SRC_DIR="$PROJECT_ROOT/data/osm/src"
 MERGED_DIR="$PROJECT_ROOT/data/osm/merged"
 
-# Hilfsfunktionen
-log_info() { echo -e "\033[1;34m[INFO]\033[0m $1"; }
-log_success() { echo -e "\033[1;32m[SUCCESS]\033[0m $1"; }
-log_error() { echo -e "\033[1;31m[ERROR]\033[0m $1"; }
+# Corporate Identity Utils einbinden
+source "$SCRIPT_DIR/ci/utils.sh"
 
 # Tool Check
 if ! command -v osmium &> /dev/null; then

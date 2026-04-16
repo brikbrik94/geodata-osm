@@ -6,6 +6,10 @@ import sys
 import time
 from datetime import datetime
 
+# Corporate Identity einbinden
+sys.path.append(os.path.join(os.path.dirname(__file__), "ci"))
+from utils import log_success, C_BOLD, C_GREEN, C_RESET
+
 # --- KONFIGURATION ---
 log_file_path = sys.argv[1]
 docker_pid = int(sys.argv[2])
@@ -147,8 +151,8 @@ except KeyboardInterrupt:
     pass
 
 # Abschluss-Report
-print(f"\n\n{BOLD}{GREEN}✔ BUILD COMPLETED!{RESET}")
+log_success("BUILD COMPLETED!")
 if dash.stats:
-    print(f" {BOLD}Duration:{RESET}  {dash.stats.get('duration', 'N/A')}")
-    print(f" {BOLD}Tile Size:{RESET} Max {dash.stats.get('max_tile', 'N/A')} | Avg {dash.stats.get('avg_tile', 'N/A')}")
+    print(f" {C_BOLD}Duration:{C_RESET}  {dash.stats.get('duration', 'N/A')}")
+    print(f" {C_BOLD}Tile Size:{C_RESET} Max {dash.stats.get('max_tile', 'N/A')} | Avg {dash.stats.get('avg_tile', 'N/A')}")
 print(f"{'='*cols}\n")
