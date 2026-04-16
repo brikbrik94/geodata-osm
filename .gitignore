@@ -1,0 +1,24 @@
+# Daten-Ordner (Downloads, Merges, Temp)
+data/
+
+# Ausgabe-Ordner (PMTiles, Manifeste, finale Styles)
+# Diese werden beim Build-Prozess generiert
+dist/
+
+# Archivierte/Alte Skripte
+legacy/
+
+# Logs
+*.log
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# OS spezifische Dateien
+.DS_Store
+Thumbs.db
+
+# Temporäre Dateien
+*.tmp
+*.osm.pbf
