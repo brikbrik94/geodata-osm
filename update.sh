@@ -40,6 +40,12 @@ update_map() {
 }
 
 # --- HAUPTPRÜFUNG ---
+log_header "PRE-FLIGHT CHECK"
+if ! bash "$SCRIPT_DIR/check_dependencies.sh"; then
+    log_error "Voraussetzungen nicht erfüllt. Abbruch."
+    exit 1
+fi
+
 MAPS_TO_UPDATE=()
 
 if [ $# -ge 1 ]; then
