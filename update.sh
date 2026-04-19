@@ -5,6 +5,18 @@ set -euo pipefail
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT_DIR="$PROJECT_ROOT/scripts"
 SOURCES_DIR="$PROJECT_ROOT/sources"
+LOG_DIR="$PROJECT_ROOT/logs"
+
+# Log-Verzeichnis sicherstellen
+mkdir -p "$LOG_DIR"
+
+# Zeitstempel für Log-Datei
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+LOG_FILE="$LOG_DIR/update_${TIMESTAMP}.log"
+
+# Alles (stdout & stderr) in Log-Datei umleiten UND auf der Konsole anzeigen
+# Wir nutzen tee, um den Output live zu sehen
+exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Corporate Identity Utils einbinden
 source "$SCRIPT_DIR/ci/utils.sh"
@@ -41,6 +53,8 @@ update_map() {
 
 # --- HAUPTPRÜFUNG ---
 log_header "PRE-FLIGHT CHECK"
+log_info "Log-Datei: $(basename "$LOG_FILE")"
+
 if ! bash "$SCRIPT_DIR/check_dependencies.sh"; then
     log_error "Voraussetzungen nicht erfüllt. Abbruch."
     exit 1

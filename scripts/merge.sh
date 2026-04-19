@@ -18,7 +18,7 @@ fi
 
 # --- HAUPTSCHLEIFE ---
 if [ $# -lt 1 ]; then
-    log_error "Verwendung: $0 <Kartenname> (z.B. at-plus)"
+    log_error "Verwendung: $0 <Kartenname>"
     exit 1
 fi
 
@@ -35,33 +35,34 @@ mapfile -t PBF_FILES < <(find "$MAP_SRC_DIR" -maxdepth 1 -name "*.osm.pbf" | sor
 
 if [ ${#PBF_FILES[@]} -eq 0 ]; then
     if [ -f "$MERGED_PBF" ]; then
-        log_success "Keine Quelldateien gefunden, aber gemergte Datei existiert bereits. Überspringe."
+        log_success "Keine Quelldateien gefunden, aber gemergte Datei existiert bereits."
         exit 0
     else
-        log_error "Keine Quelldateien in $MAP_SRC_DIR gefunden und keine $MERGED_PBF vorhanden!"
+        log_error "Keine Quelldateien in $MAP_SRC_DIR gefunden!"
         exit 1
     fi
 fi
 
-# Entscheidung: Kopieren oder Mergen
 if [ ${#PBF_FILES[@]} -eq 1 ]; then
     log_info "Nur eine Quelldatei gefunden. Kopiere direkt..."
     cp -f "${PBF_FILES[0]}" "$MERGED_PBF"
 else
     log_info "Merge von ${#PBF_FILES[@]} Dateien zu $MERGED_PBF..."
-    osmium merge "${PBF_FILES[@]}" -o "$MERGED_PBF" --overwrite
+    # Einfacher Merge ohne Sort (spart massiv RAM)
+    if osmium merge "${PBF_FILES[@]}" -o "$MERGED_PBF" --overwrite; then
+        log_success "Merge erfolgreich abgeschlossen."
+    else
+        log_error "Fehler beim Mergen."
+        exit 1
+    fi
 fi
 
-# Validierung
+# Abschluss-Check
 if [ -f "$MERGED_PBF" ] && [ $(stat -c%s "$MERGED_PBF") -gt 1000 ]; then
-    log_success "Merge erfolgreich abgeschlossen."
-    
-    # --- SPEICHER OPTIMIERUNG ---
-    log_info "Lösche Quelldateien in $MAP_SRC_DIR, um Platz zu sparen..."
-    # Wir behalten nur die versteckten .url Dateien für den Versions-Check
+    log_info "Lösche Quelldateien in $MAP_SRC_DIR..."
     find "$MAP_SRC_DIR" -maxdepth 1 -name "*.osm.pbf" -delete
     log_success "Bereinigung abgeschlossen."
 else
-    log_error "Merge scheint fehlgeschlagen zu sein (Zieldatei zu klein oder fehlt)."
+    log_error "Merge-Ergebnis ungültig."
     exit 1
 fi

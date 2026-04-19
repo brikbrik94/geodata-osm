@@ -8,7 +8,7 @@ MERGED_DIR="$PROJECT_ROOT/data/osm/merged"
 OUTPUT_DIR="$PROJECT_ROOT/dist/pmtiles"
 BUILD_TMP="$PROJECT_ROOT/data/osm/tmp"
 DATA_DIR="$PROJECT_ROOT/data/osm/data"
-STATS_DIR="$PROJECT_ROOT/data/osm/stats"
+LOG_DIR="$PROJECT_ROOT/logs"
 
 DOCKER_IMAGE="ghcr.io/onthegomap/planetiler:latest"
 USE_SUDO="${USE_SUDO:-0}"
@@ -16,7 +16,7 @@ USE_SUDO="${USE_SUDO:-0}"
 # Corporate Identity Utils einbinden
 source "$SCRIPT_DIR/ci/utils.sh"
 
-mkdir -p "$BUILD_TMP" "$DATA_DIR" "$OUTPUT_DIR" "$STATS_DIR"
+mkdir -p "$BUILD_TMP" "$DATA_DIR" "$OUTPUT_DIR" "$LOG_DIR"
 
 # Docker Check
 DOCKER_BIN="$(command -v docker 2>/dev/null || true)"
@@ -36,7 +36,8 @@ fi
 MAP_NAME="$1"
 MERGED_PBF="$MERGED_DIR/${MAP_NAME}.osm.pbf"
 PMTILES_NAME="${MAP_NAME}.pmtiles"
-LOG_FILE="$STATS_DIR/${MAP_NAME}_build.log"
+# Build-Log im neuen zentralen Log-Ordner
+BUILD_LOG="$LOG_DIR/${MAP_NAME}_build_$(date +%Y%m%d_%H%M%S).log"
 
 if [ ! -f "$MERGED_PBF" ]; then
     log_error "Gemergte PBF nicht gefunden: $MERGED_PBF"
@@ -44,10 +45,7 @@ if [ ! -f "$MERGED_PBF" ]; then
 fi
 
 log_info "Starte PMTiles Konvertierung für: $MAP_NAME"
-log_info "Log wird gespeichert in: $LOG_FILE"
-
-# Logfile leeren
-> "$LOG_FILE"
+log_info "Build-Log: $(basename "$BUILD_LOG")"
 
 # Planetiler starten (Hintergrund)
 $DOCKER_CMD run --rm \
@@ -61,13 +59,13 @@ $DOCKER_CMD run --rm \
   --tmpdir=/mnt/tmp \
   --force \
   --download=true \
-  >> "$LOG_FILE" 2>&1 &
+  >> "$BUILD_LOG" 2>&1 &
 
 PID=$!
 
 # Progress anzeigen
 if [ -f "$SCRIPT_DIR/planetiler_follow.py" ]; then
-    python3 -u "$SCRIPT_DIR/planetiler_follow.py" "$LOG_FILE" "$PID"
+    python3 -u "$SCRIPT_DIR/planetiler_follow.py" "$BUILD_LOG" "$PID"
 else
     log_info "Warte auf Docker Prozess (PID $PID)..."
     wait $PID
@@ -79,6 +77,6 @@ if [ $EXIT_CODE -eq 0 ] && [ -f "$OUTPUT_DIR/$PMTILES_NAME" ]; then
     SIZE_H=$(du -h "$OUTPUT_DIR/$PMTILES_NAME" | cut -f1)
     log_success "PMTiles erfolgreich erstellt: $OUTPUT_DIR/$PMTILES_NAME ($SIZE_H)"
 else
-    log_error "Konvertierung fehlgeschlagen (Exit Code: $EXIT_CODE). Siehe Log: $LOG_FILE"
+    log_error "Konvertierung fehlgeschlagen (Exit Code: $EXIT_CODE). Siehe Build-Log: $BUILD_LOG"
     exit 1
 fi
