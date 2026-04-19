@@ -5,8 +5,8 @@ set -euo pipefail
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRIPT_DIR="$PROJECT_ROOT/scripts"
 SOURCES_DIR="$PROJECT_ROOT/sources"
-DATA_SRC_DIR="$PROJECT_ROOT/data/osm/src"
-MERGED_DIR="$PROJECT_ROOT/data/osm/merged"
+DATA_SRC_DIR="$PROJECT_ROOT/data/src"
+MERGED_DIR="$PROJECT_ROOT/data/merged"
 
 # Corporate Identity Utils einbinden
 source "$SCRIPT_DIR/ci/utils.sh"

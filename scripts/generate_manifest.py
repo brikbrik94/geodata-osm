@@ -51,11 +51,12 @@ def generate_manifest():
         else:
             log_warn(f"Template style not found: {TEMPLATE_STYLE}")
 
-        # 2. Datensatz-Eintrag
+        # 2. Datensatz-Eintrag (Standard v1.2 konform)
         dataset = {
             "id": map_id,
             "type": "basemap",
             "source": "osm",
+            "sprite_id": "maki",
             "name": f"OSM {map_id.replace('-', ' ').title()}",
             "style_path": style_rel_path,
             "pmtiles_path": pmtiles_rel_path
@@ -69,7 +70,7 @@ def generate_manifest():
     manifest = {
         "version": "1.0",
         "project": "geodata-osm",
-        "generated_at": datetime.now().isoformat() + "Z",
+        "generated_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "datasets": datasets,
         "resources": {
             "sprites": [],

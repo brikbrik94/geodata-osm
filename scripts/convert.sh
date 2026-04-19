@@ -4,10 +4,10 @@ set -euo pipefail
 # --- KONFIGURATION ---
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRIPT_DIR="$PROJECT_ROOT/scripts"
-MERGED_DIR="$PROJECT_ROOT/data/osm/merged"
+MERGED_DIR="$PROJECT_ROOT/data/merged"
 OUTPUT_DIR="$PROJECT_ROOT/dist/pmtiles"
-BUILD_TMP="$PROJECT_ROOT/data/osm/tmp"
-DATA_DIR="$PROJECT_ROOT/data/osm/data"
+BUILD_TMP="$PROJECT_ROOT/work"
+DATA_DIR="$PROJECT_ROOT/data/sources"
 LOG_DIR="$PROJECT_ROOT/logs"
 
 DOCKER_IMAGE="ghcr.io/onthegomap/planetiler:latest"

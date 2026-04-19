@@ -4,8 +4,8 @@ set -euo pipefail
 # --- KONFIGURATION ---
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRIPT_DIR="$PROJECT_ROOT/scripts"
-DATA_SRC_DIR="$PROJECT_ROOT/data/osm/src"
-MERGED_DIR="$PROJECT_ROOT/data/osm/merged"
+DATA_SRC_DIR="$PROJECT_ROOT/data/src"
+MERGED_DIR="$PROJECT_ROOT/data/merged"
 
 # Corporate Identity Utils einbinden
 source "$SCRIPT_DIR/ci/utils.sh"
