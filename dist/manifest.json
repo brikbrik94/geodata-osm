@@ -1,0 +1,47 @@
+{
+  "version": "1.0",
+  "project": "geodata-osm",
+  "generated_at": "2026-05-11T09:26:37Z",
+  "datasets": [
+    {
+      "id": "at+nbl",
+      "type": "basemap",
+      "source": "osm",
+      "sprite_id": "maki",
+      "name": "OSM At+Nbl",
+      "style_path": "styles/at+nbl.json",
+      "pmtiles_path": "pmtiles/at+nbl.pmtiles"
+    },
+    {
+      "id": "at-plus",
+      "type": "basemap",
+      "source": "osm",
+      "sprite_id": "maki",
+      "name": "OSM At Plus",
+      "style_path": "styles/at-plus.json",
+      "pmtiles_path": "pmtiles/at-plus.pmtiles"
+    },
+    {
+      "id": "at",
+      "type": "basemap",
+      "source": "osm",
+      "sprite_id": "maki",
+      "name": "OSM At",
+      "style_path": "styles/at.json",
+      "pmtiles_path": "pmtiles/at.pmtiles"
+    },
+    {
+      "id": "test-tiny",
+      "type": "basemap",
+      "source": "osm",
+      "sprite_id": "maki",
+      "name": "OSM Test Tiny",
+      "style_path": "styles/test-tiny.json",
+      "pmtiles_path": "pmtiles/test-tiny.pmtiles"
+    }
+  ],
+  "resources": {
+    "sprites": [],
+    "fonts": []
+  }
+}
