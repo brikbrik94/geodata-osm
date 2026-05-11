@@ -1153,6 +1153,41 @@
       }
     },
     {
+      "id": "poi",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "poi",
+      "minzoom": 14,
+      "layout": {
+        "icon-image": [
+          "match",
+          ["get", "class"],
+          "hospital", "hospital-15",
+          "pharmacy", "pharmacy-15",
+          "restaurant", "restaurant-15",
+          "cafe", "cafe-15",
+          "fast_food", "fast-food-15",
+          "bar", "bar-15",
+          ["shop", "grocery"], "shop-15",
+          ["museum", "monument", "attraction"], "attraction-15",
+          "marker-15"
+        ],
+        "icon-size": 1,
+        "text-field": "{name}",
+        "text-font": ["Noto-Sans-Regular"],
+        "text-size": 10,
+        "text-offset": [0, 1.2],
+        "text-anchor": "top",
+        "icon-optional": false,
+        "text-optional": true
+      },
+      "paint": {
+        "text-color": "#666666",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.5
+      }
+    },
+    {
       "id": "road-label",
       "type": "symbol",
       "source": "openmaptiles",
@@ -1263,41 +1298,6 @@
         ],
         "text-halo-color": "rgba(255,255,255,0.8)",
         "text-halo-width": 2
-      }
-    },
-    {
-      "id": "poi",
-      "type": "symbol",
-      "source": "openmaptiles",
-      "source-layer": "poi",
-      "minzoom": 14,
-      "layout": {
-        "icon-image": [
-          "match",
-          ["get", "class"],
-          "hospital", "hospital-15",
-          "pharmacy", "pharmacy-15",
-          "restaurant", "restaurant-15",
-          "cafe", "cafe-15",
-          "fast_food", "fast-food-15",
-          "bar", "bar-15",
-          ["shop", "grocery"], "shop-15",
-          ["museum", "monument", "attraction"], "attraction-15",
-          "marker-15"
-        ],
-        "icon-size": 1,
-        "text-field": "{name}",
-        "text-font": ["Noto-Sans-Regular"],
-        "text-size": 10,
-        "text-offset": [0, 1.2],
-        "text-anchor": "top",
-        "icon-optional": false,
-        "text-optional": true
-      },
-      "paint": {
-        "text-color": "#666666",
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1.5
       }
     }
   ]
